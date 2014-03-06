@@ -2,6 +2,16 @@
 An heap implementation that uses immutable nodes
 """
 
+import logging
+
+logger = logging.getLogger(__name__)
+# if there is no handler run this code
+if not logger.handlers:
+    logger.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    logger.addHandler(ch)
+
 
 def compare(a, b):
     return a > b
