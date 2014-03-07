@@ -151,7 +151,9 @@ def push(node, val):
 
 def pop_leaf(node):
     """
-    pop last added leaf
+    pop last added leaf.
+    pop_leaf(heap) -> (new_heap, poped_node)
+
     """
     if is_leaf(node):
         return None, node
@@ -178,6 +180,7 @@ def pop(node):
     remove last added node
     add last added node as root node
     switch root with children if necessary.(sink last added node)
+    pop(heap) -> (new_heap, value)
     """
     val = value(node)
     node, poped = pop_leaf(node)
