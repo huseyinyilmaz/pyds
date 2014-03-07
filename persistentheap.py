@@ -75,6 +75,19 @@ def set_value(node, value):
     return(node[0], value, node[2], node[3])
 
 
+def get_both_deepness(node):
+    if not node:
+        return 0
+    else:
+        left_deepness = get_both_deepness(left(node))
+        right_deepness = get_both_deepness(right(node))
+        return left_deepness + 1 if left_deepness == right_deepness else None
+
+
+def is_complete(node):
+    return not node or bool(get_both_deepness(node))
+
+
 def make_node(left, value, right):
     """
     Creates a new node

@@ -50,5 +50,20 @@ class TestImmutableHeap(unittest.TestCase):
             self.assertEqual(val, i)
         self.assertIsNone(h)
 
+    # def test_is_complete(self):
+    #     h = None
+    #     self.assertTrue(heap.is_complete(h))
+
+    #     for i in range(11):
+    #         if i in [0, 1, 3, 7]:
+    #             self.assertTrue(heap.is_complete(h))
+    #         else:
+    #             self.assertFalse(heap.is_complete(h))
+
+    #         h = heap.push(h, i)
+
+    #     self.assertFalse(heap.is_complete(h))
+
+
 if __name__ == '__main__':
     unittest.main()
