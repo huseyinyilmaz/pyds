@@ -1,5 +1,5 @@
-pyds
-====
+python data structures
+======================
 
 Data structure implementations in python
 
