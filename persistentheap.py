@@ -18,7 +18,7 @@ if not logger.handlers:
     logger.addHandler(ch)
 
 
-def compare(a, b):
+def _compare(a, b):
     """
     Compare function in a consistent tree
     compare(parent, child) is True
@@ -81,7 +81,7 @@ def make_node(left, value, right):
     return (left, value, right, (1 + count(left) + count(right)))
 
 
-def update_value(node, val):
+def update_value(node, val, compare=_compare):
     """
     updates value of a node.
     if childs are bigger than parent it switches child with parent
@@ -120,7 +120,7 @@ def is_leaf(node):
     return count(node) == 1
 
 
-def push(node, val):
+def push(node, val, compare=_compare):
     """
     Add a new value to heap.
     Addes to value as a branch than switches added branch
@@ -175,7 +175,7 @@ def pop_leaf(node):
         return (node, poped)
 
 
-def pop(node):
+def pop(node, compare=_compare):
     """
     pop head of the heap
     remove last added node
