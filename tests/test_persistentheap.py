@@ -1,7 +1,7 @@
 import random
 import unittest
 
-import immutableheap
+import persistentheap as heap
 
 
 class TestImmutableHeap(unittest.TestCase):
@@ -11,30 +11,30 @@ class TestImmutableHeap(unittest.TestCase):
         pass
 
     def test_enter_smaller_value(self):
-        h = immutableheap.push(None, 5)
-        h = immutableheap.push(h, 3)
-        self.assertEqual(immutableheap.count(h), 2)
+        h = heap.push(None, 5)
+        h = heap.push(h, 3)
+        self.assertEqual(heap.count(h), 2)
 
     def test_enter_larger_value(self):
-        h = immutableheap.push(None, 3)
-        h = immutableheap.push(h, 5)
-        self.assertEqual(immutableheap.count(h), 2)
+        h = heap.push(None, 3)
+        h = heap.push(h, 5)
+        self.assertEqual(heap.count(h), 2)
 
     def test_push(self):
         count = self.SIZE
         head = count - 1
         h = None
         for i in range(count):
-            h = immutableheap.push(h, i)
-        self.assertEqual(immutableheap.count(h), count)
-        self.assertEqual(immutableheap.value(h), head)
+            h = heap.push(h, i)
+        self.assertEqual(heap.count(h), count)
+        self.assertEqual(heap.value(h), head)
 
     def test_pop(self):
         h = None
         for i in range(self.SIZE):
-            h = immutableheap.push(h, i)
+            h = heap.push(h, i)
         for i in reversed(range(self.SIZE)):
-            h, val = immutableheap.pop(h)
+            h, val = heap.pop(h)
             self.assertEqual(val, i)
         self.assertIsNone(h)
 
@@ -42,11 +42,11 @@ class TestImmutableHeap(unittest.TestCase):
         sample_list = [random.randint(1, 100000) for i in range(self.SIZE)]
         h = None
         for i in sample_list:
-            h = immutableheap.push(h, i)
+            h = heap.push(h, i)
 
         sorted_list = sorted(sample_list, reverse=True)
         for i in sorted_list:
-            h, val = immutableheap.pop(h)
+            h, val = heap.pop(h)
             self.assertEqual(val, i)
         self.assertIsNone(h)
 
