@@ -14,6 +14,10 @@ if not logger.handlers:
 
 
 def compare(a, b):
+    """
+    Compare function in a consistent tree
+    compare(parent, child) is True
+    """
     return a > b
 
 
@@ -51,6 +55,25 @@ def make_node(left, value, right):
     return (left, value, right, (1 + count(left) + count(right)))
 
 
+def update_value(node, val):
+    """
+    updates value of a node.
+    if childs are bigger than parent it switches child with parent
+    """
+    left_node = left(node)
+    right_node = right(node)
+    left_val = value(left_node) if left_node else None
+    right_val = value(right_node) if right_node else None
+
+    if left_node and compare(left_val, val):
+        left_node = update_value(left_node, val)
+        val = left_val
+    if right_node and compare(right_val, val):
+        right_node = update_value(right_node, val)
+        val = right_val
+    return make_node(left_node, val, right_node)
+
+
 def count(node):
     if not node:
         result = 0
@@ -67,26 +90,32 @@ def push(node, val):
     if not node:
         node = make_node(None, val, None)
     else:
+        # push new value to smaller branch
         if count(left(node)) <= count(right(node)):
             child = left(node)
             set_fun = set_left
-            print 'goto_left'
+            # logger.debug('goto_left')
         else:
             child = right(node)
             set_fun = set_right
-            print 'goto_right'
+            # logger.debug('goto_right')
+
         child = push(child, val)
 
         if compare(value(child), value(node)):
             child_value = value(child)
             child = set_value(child, value(node))
-            node = set_fun(node, child)
             node = set_value(node, child_value)
 
+        node = set_fun(node, child)
     return node
 
 
 def pop_leaf(node):
+
+    if is_leaf(node):
+        return None, node
+
     if count(left(node)) > count(right(node)):
         child = left(node)
         set_fun = set_left
@@ -104,12 +133,8 @@ def pop_leaf(node):
 
 
 def pop(node):
-    pass
-
-# def balance(node):
-#     val = value(node)
-#     left_node = balance(left(node))
-#     right_node = balance(right(node))
-#     if value(left_node) > val:
-#         val = value(left_node)
-#         left_node = set_value(left_node)
+    val = value(node)
+    node, poped = pop_leaf(node)
+    if node:
+        node = update_value(node, value(poped))
+    return node, val
