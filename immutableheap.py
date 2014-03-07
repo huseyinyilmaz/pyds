@@ -1,5 +1,9 @@
 """
-An heap implementation that uses immutable nodes
+An heap implementation that uses immutable nodes.
+h = None  # empty node
+h = push(h, value) # add value to heap.
+count(h) # get element count of heap.
+(h, poped_value) = pop(h) # remove head and return new heap
 """
 
 import logging
@@ -22,10 +26,16 @@ def compare(a, b):
 
 
 def left(node):
+    """
+    get left branch of given node
+    """
     return node[0]
 
 
 def set_left(node, left_node):
+    """
+    set left branch of given node
+    """
     return (left_node,
             node[1],
             node[2],
@@ -33,10 +43,16 @@ def set_left(node, left_node):
 
 
 def right(node):
+    """
+    get right branch of given node
+    """
     return node[2]
 
 
 def set_right(node, right_node):
+    """
+    set right branch of given node
+    """
     return (node[0],
             node[1],
             right_node,
@@ -44,14 +60,23 @@ def set_right(node, right_node):
 
 
 def value(node):
+    """
+    get value of given node
+    """
     return node[1]
 
 
 def set_value(node, value):
+    """
+    set vlaue of given node
+    """
     return(node[0], value, node[2], node[3])
 
 
 def make_node(left, value, right):
+    """
+    Creates a new node
+    """
     return (left, value, right, (1 + count(left) + count(right)))
 
 
@@ -68,6 +93,7 @@ def update_value(node, val):
     if left_node and compare(left_val, val):
         left_node = update_value(left_node, val)
         val = left_val
+
     if right_node and compare(right_val, val):
         right_node = update_value(right_node, val)
         val = right_val
@@ -75,6 +101,9 @@ def update_value(node, val):
 
 
 def count(node):
+    """
+    return length of current heap
+    """
     if not node:
         result = 0
     else:
@@ -83,10 +112,19 @@ def count(node):
 
 
 def is_leaf(node):
-    return not left(node) and not right(node)
+    """
+    check if current node is a leaf
+    """
+    # return not left(node) and not right(node)
+    return count(node) == 1
 
 
 def push(node, val):
+    """
+    Add a new value to heap.
+    Addes to value as a branch than switches added branch
+    with its parent if needed.(push and swim)
+    """
     if not node:
         node = make_node(None, val, None)
     else:
@@ -112,7 +150,9 @@ def push(node, val):
 
 
 def pop_leaf(node):
-
+    """
+    pop last added leaf
+    """
     if is_leaf(node):
         return None, node
 
@@ -133,6 +173,12 @@ def pop_leaf(node):
 
 
 def pop(node):
+    """
+    pop head of the heap
+    remove last added node
+    add last added node as root node
+    switch root with children if necessary.(sink last added node)
+    """
     val = value(node)
     node, poped = pop_leaf(node)
     if node:
