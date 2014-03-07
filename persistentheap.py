@@ -20,8 +20,9 @@ if not logger.handlers:
 
 def _compare(a, b):
     """
-    Compare function in a consistent tree
-    compare(parent, child) is True
+    Compare function.
+    In a consistent tree:
+        compare(parent, child) is True
     """
     return a > b
 
