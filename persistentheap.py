@@ -114,6 +114,7 @@ def is_consistent(node, compare=_compare):
             (compare(val, value(right_node)) and
              is_consistent(right_node)) if right_node else True
 
+        ## TODO make sure left and right branch has right deepness level
         return is_left_consistent and is_right_consistent
 
 
