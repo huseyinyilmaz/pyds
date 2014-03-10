@@ -104,6 +104,8 @@ def is_consistent(node, compare=_compare):
         left_node = left(node)
         right_node = right(node)
 
+        # if there is no left_node,
+        # that means left branch is already consistent
         is_left_consistent = \
             (compare(val, value(left_node)) and
              is_consistent(left_node)) if left_node else True
