@@ -77,15 +77,41 @@ def set_value(node, value):
 
 def get_both_deepness(node):
     if not node:
-        return 0
+        result = 0
     else:
         left_deepness = get_both_deepness(left(node))
         right_deepness = get_both_deepness(right(node))
-        return left_deepness + 1 if left_deepness == right_deepness else None
+
+        if ((left_deepness == right_deepness) and
+                (left_deepness is not None) and
+                (right_deepness is not None)):
+            result = left_deepness + 1
+        else:
+            result = None
+    return result
 
 
 def is_complete(node):
     return not node or bool(get_both_deepness(node))
+
+
+def is_consistent(node, compare=_compare):
+    if node is None:
+        return True
+    else:
+        val = value(node)
+        left_node = left(node)
+        right_node = right(node)
+
+        is_left_consistent = \
+            (compare(val, value(left_node)) and
+             is_consistent(left_node)) if left_node else True
+
+        is_right_consistent = \
+            (compare(val, value(right_node)) and
+             is_consistent(right_node)) if right_node else True
+
+        return is_left_consistent and is_right_consistent
 
 
 def make_node(left, value, right):
@@ -134,6 +160,43 @@ def is_leaf(node):
     return count(node) == 1
 
 
+def is_add_to_left(node):
+    """
+    Decide if we should add next node to left or right branch
+    """
+    right_deepness = get_both_deepness(right(node))
+    left_deepness = get_both_deepness(left(node))
+    if right_deepness is None:
+        # go to right
+        result = False
+    elif left_deepness is None:
+        # go to left
+        result = True
+    elif left_deepness > right_deepness:
+        result = False
+    else:
+        result = True
+
+    return result
+
+
+def is_pop_from_left(node):
+    right_deepness = get_both_deepness(right(node))
+    left_deepness = get_both_deepness(left(node))
+    if right_deepness is None:
+        # go to right
+        result = False
+    elif left_deepness is None:
+        # go to left
+        result = True
+    elif left_deepness > right_deepness:
+        result = True
+    else:
+        result = False
+
+    return result
+
+
 def push(node, val, compare=_compare):
     """
     Add a new value to heap.
@@ -144,7 +207,8 @@ def push(node, val, compare=_compare):
         node = make_node(None, val, None)
     else:
         # push new value to smaller branch
-        if count(left(node)) <= count(right(node)):
+        # if count(left(node)) <= count(right(node)):
+        if is_add_to_left(node):
             child = left(node)
             set_fun = set_left
             # logger.debug('goto_left')
@@ -173,7 +237,8 @@ def pop_leaf(node):
     if is_leaf(node):
         return None, node
 
-    if count(left(node)) > count(right(node)):
+    # if count(left(node)) > count(right(node)):
+    if is_pop_from_left(node):
         child = left(node)
         set_fun = set_left
     else:

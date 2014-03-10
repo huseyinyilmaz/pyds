@@ -5,7 +5,7 @@ import persistentheap as heap
 
 
 class TestImmutableHeap(unittest.TestCase):
-    SIZE = 1000
+    SIZE = 100
 
     def setUp(self):
         pass
@@ -26,6 +26,8 @@ class TestImmutableHeap(unittest.TestCase):
         h = None
         for i in range(count):
             h = heap.push(h, i)
+            self.assertTrue(heap.is_consistent(h))
+
         self.assertEqual(heap.count(h), count)
         self.assertEqual(heap.value(h), head)
 
@@ -33,9 +35,13 @@ class TestImmutableHeap(unittest.TestCase):
         h = None
         for i in range(self.SIZE):
             h = heap.push(h, i)
+            self.assertTrue(heap.is_consistent(h))
+
         for i in reversed(range(self.SIZE)):
             h, val = heap.pop(h)
             self.assertEqual(val, i)
+            self.assertTrue(heap.is_consistent(h))
+
         self.assertIsNone(h)
 
     def test_sort(self):
@@ -50,19 +56,43 @@ class TestImmutableHeap(unittest.TestCase):
             self.assertEqual(val, i)
         self.assertIsNone(h)
 
-    # def test_is_complete(self):
-    #     h = None
-    #     self.assertTrue(heap.is_complete(h))
+    def test_is_complete(self):
+        h = None
+        self.assertTrue(heap.is_complete(h))
 
-    #     for i in range(11):
-    #         if i in [0, 1, 3, 7]:
-    #             self.assertTrue(heap.is_complete(h))
-    #         else:
-    #             self.assertFalse(heap.is_complete(h))
+        for i in range(11):
+            if i in [0, 1, 3, 7]:
+                self.assertTrue(heap.is_complete(h))
+            else:
+                self.assertFalse(heap.is_complete(h))
 
-    #         h = heap.push(h, i)
+            h = heap.push(h, i)
 
-    #     self.assertFalse(heap.is_complete(h))
+        self.assertFalse(heap.is_complete(h))
+
+    def test_complete_branch_aware_adding(self):
+        h = None
+        h = heap.push(h, 1)
+        self.assertTrue(heap.is_complete(h))
+        self.assertTrue(heap.is_consistent(h))
+
+        h = heap.push(h, 2)
+        self.assertFalse(heap.is_complete(h))
+        self.assertTrue(heap.is_complete(heap.left(h)))
+        self.assertIsNone(heap.right(h))
+        self.assertTrue(heap.is_consistent(h))
+
+
+        h = heap.push(h, 3)
+        self.assertTrue(heap.is_complete(h))
+        self.assertTrue(heap.is_consistent(h))
+
+
+        h = heap.push(h, 5)
+        self.assertFalse(heap.is_complete(h))
+        self.assertFalse(heap.is_complete(heap.left(h)))
+        self.assertTrue(heap.is_complete(heap.right(h)))
+        self.assertTrue(heap.is_consistent(h))
 
 
 if __name__ == '__main__':
