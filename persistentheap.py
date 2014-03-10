@@ -7,16 +7,6 @@ count(h) # get element count of heap.
 
 """
 
-import logging
-
-logger = logging.getLogger(__name__)
-# if there is no handler run this code
-if not logger.handlers:
-    logger.setLevel(logging.DEBUG)
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-    logger.addHandler(ch)
-
 
 def _compare(a, b):
     """
@@ -75,12 +65,19 @@ def set_value(node, value):
     return(node[0], value, node[2], node[3])
 
 
-def get_both_deepness(node):
+def get_complete_deepness(node):
+    """
+    Returns deepness of a complete binary tree.
+    If tree branches is not complete or if they have
+    different deepness level, function returns None.
+    Only, if Both branches of tree has same deepness function will return an
+    integer value.
+    """
     if not node:
         result = 0
     else:
-        left_deepness = get_both_deepness(left(node))
-        right_deepness = get_both_deepness(right(node))
+        left_deepness = get_complete_deepness(left(node))
+        right_deepness = get_complete_deepness(right(node))
 
         if ((left_deepness == right_deepness) and
                 (left_deepness is not None) and
@@ -92,10 +89,14 @@ def get_both_deepness(node):
 
 
 def is_complete(node):
-    return not node or bool(get_both_deepness(node))
+    "Check if given heap is a complete binary tree"
+    return not node or bool(get_complete_deepness(node))
 
 
 def is_consistent(node, compare=_compare):
+    """
+    Check if hash has a consistent state for given compare function.
+    """
     if node is None:
         return True
     else:
@@ -164,8 +165,8 @@ def is_add_to_left(node):
     """
     Decide if we should add next node to left or right branch
     """
-    right_deepness = get_both_deepness(right(node))
-    left_deepness = get_both_deepness(left(node))
+    right_deepness = get_complete_deepness(right(node))
+    left_deepness = get_complete_deepness(left(node))
     if right_deepness is None:
         # go to right
         result = False
@@ -181,8 +182,11 @@ def is_add_to_left(node):
 
 
 def is_pop_from_left(node):
-    right_deepness = get_both_deepness(right(node))
-    left_deepness = get_both_deepness(left(node))
+    """
+    Decides if we should pop next node from left branch or right branch
+    """
+    right_deepness = get_complete_deepness(right(node))
+    left_deepness = get_complete_deepness(left(node))
     if right_deepness is None:
         # go to right
         result = False
@@ -207,15 +211,12 @@ def push(node, val, compare=_compare):
         node = make_node(None, val, None)
     else:
         # push new value to smaller branch
-        # if count(left(node)) <= count(right(node)):
         if is_add_to_left(node):
             child = left(node)
             set_fun = set_left
-            # logger.debug('goto_left')
         else:
             child = right(node)
             set_fun = set_right
-            # logger.debug('goto_right')
 
         child = push(child, val)
 
@@ -237,7 +238,6 @@ def pop_leaf(node):
     if is_leaf(node):
         return None, node
 
-    # if count(left(node)) > count(right(node)):
     if is_pop_from_left(node):
         child = left(node)
         set_fun = set_left
