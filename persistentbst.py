@@ -32,10 +32,15 @@ def push(tree, val, key=_key_func):
         parent_val = value(tree)
         if key(parent_val) > key(val):
             #goto left
-            return set_left(tree, push(left(tree)))
+            return set_left(tree, push(left(tree), val))
         else:
             # goto right
-            return set_right(tree, push(right(tree)))
+            return set_right(tree, push(right(tree), val))
+
+
+def pop(tree, value, key=_key_func):
+    # TODO
+    pass
 
 
 def contains(tree, value, key=_key_func):

@@ -2,23 +2,20 @@ import random
 import unittest
 
 import persistentheap as heap
-
+import node
 
 class TestImmutableHeap(unittest.TestCase):
     SIZE = 100
 
-    def setUp(self):
-        pass
-
     def test_enter_smaller_value(self):
         h = heap.push(None, 5)
         h = heap.push(h, 3)
-        self.assertEqual(heap.count(h), 2)
+        self.assertEqual(node.count(h), 2)
 
     def test_enter_larger_value(self):
         h = heap.push(None, 3)
         h = heap.push(h, 5)
-        self.assertEqual(heap.count(h), 2)
+        self.assertEqual(node.count(h), 2)
 
     def test_push(self):
         count = self.SIZE
@@ -28,8 +25,8 @@ class TestImmutableHeap(unittest.TestCase):
             h = heap.push(h, i)
             self.assertTrue(heap.is_consistent(h))
 
-        self.assertEqual(heap.count(h), count)
-        self.assertEqual(heap.value(h), head)
+        self.assertEqual(node.count(h), count)
+        self.assertEqual(node.value(h), head)
 
     def test_pop(self):
         h = None
@@ -78,20 +75,18 @@ class TestImmutableHeap(unittest.TestCase):
 
         h = heap.push(h, 2)
         self.assertFalse(heap.is_complete(h))
-        self.assertTrue(heap.is_complete(heap.left(h)))
-        self.assertIsNone(heap.right(h))
+        self.assertTrue(heap.is_complete(node.left(h)))
+        self.assertIsNone(node.right(h))
         self.assertTrue(heap.is_consistent(h))
-
 
         h = heap.push(h, 3)
         self.assertTrue(heap.is_complete(h))
         self.assertTrue(heap.is_consistent(h))
 
-
         h = heap.push(h, 5)
         self.assertFalse(heap.is_complete(h))
-        self.assertFalse(heap.is_complete(heap.left(h)))
-        self.assertTrue(heap.is_complete(heap.right(h)))
+        self.assertFalse(heap.is_complete(node.left(h)))
+        self.assertTrue(heap.is_complete(node.right(h)))
         self.assertTrue(heap.is_consistent(h))
 
 
