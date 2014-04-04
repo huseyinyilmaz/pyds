@@ -84,5 +84,22 @@ def pop_min(tree):
 
 
 def pop(tree, val, key=_key_func):
-    # TODO
-    pass
+    """
+    Removes value from given tree
+    """
+    if tree is None:
+        return tree, None
+    elif key(value(tree)) == key(val):
+        if left(tree):
+            left_node, new_val = pop_max(left(tree))
+            return make_node(left_node, new_val, right(tree)), val
+        else:
+            return right(tree), val
+    elif key(value(tree)) > key(val):
+        # goto left
+        left_node, new_val = pop(left(tree), val, key=key)
+        return set_left(tree, left_node), new_val
+    else:
+        # goto right
+        right_node, new_val = pop(right(tree), val, key=key)
+        return set_right(tree, right_node), new_val

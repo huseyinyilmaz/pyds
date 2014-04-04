@@ -65,3 +65,25 @@ class TestImmutableHeap(unittest.TestCase):
         self.assertIs(t, None)
         # check if we pop from empty tree result is None
         self.assertEqual(bst.pop_max(None), (None, None))
+
+    def test_pop(self):
+        values = [10, 5, 15, 3, 7, 13, 17, 20, 1]
+        not_values = [2, 4, 6, 8, 11, 18, 21]
+        t = None
+
+        for val in values:
+            t = bst.push(t, val)
+
+        for val in not_values:
+            self.assertEqual(bst.pop(t, val), (t, None))
+
+        # pop back all values
+        shuffled_values = values[:]
+        random.shuffle(shuffled_values)
+        for expected_val in shuffled_values:
+            t, new_val = bst.pop(t, expected_val)
+            self.assertEqual(new_val, expected_val)
+        # make sure that whole tree is empty
+        self.assertIs(t, None)
+        # check if we pop from empty tree result is None
+        self.assertEqual(bst.pop(None, 5), (None, None))
