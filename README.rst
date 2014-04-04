@@ -17,7 +17,7 @@ A persistent heap implementation.
    (h, poped_value) = pop(h) # remove head and return new heap
 
 
-persistendbst
+persistentbst
 -------------
 
 A persistend binary search tree implementation.
