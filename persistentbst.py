@@ -97,9 +97,19 @@ def pop(tree, val, key=_key_func):
             return right(tree), val
     elif key(value(tree)) > key(val):
         # goto left
-        left_node, new_val = pop(left(tree), val, key=key)
-        return set_left(tree, left_node), new_val
+        left_tree = left(tree)
+        left_node, new_val = pop(left_tree, val, key=key)
+        # if left tree is not changed return original tree
+        if left_tree != left_node:
+            return set_left(tree, left_node), new_val
+        else:
+            return tree, new_val
     else:
         # goto right
-        right_node, new_val = pop(right(tree), val, key=key)
-        return set_right(tree, right_node), new_val
+        right_tree = right(tree)
+        right_node, new_val = pop(right_tree, val, key=key)
+        # if right_tree is not changed return original tree
+        if right_tree != right_node:
+            return set_right(tree, right_node), new_val
+        else:
+            return tree, new_val
