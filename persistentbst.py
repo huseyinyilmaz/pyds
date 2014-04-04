@@ -3,7 +3,8 @@ Binary search tree implementation.
 """
 from node import (left, set_left,
                   right, set_right,
-                  value, make_node)
+                  value, make_node,
+                  count)
 
 
 def _key_func(a):
