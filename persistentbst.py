@@ -38,20 +38,51 @@ def push(tree, val, key=_key_func):
             return set_right(tree, push(right(tree), val))
 
 
-def pop(tree, value, key=_key_func):
-    # TODO
-    pass
-
-
-def contains(tree, value, key=_key_func):
+def contains(tree, val, key=_key_func):
+    """
+    Checks if tree contains given node.
+    """
     if tree is None:
         return False
-    elif key(value(tree)) == key(value):
+    elif key(value(tree)) == key(val):
         return True
     else:
-        if key(value(tree)) > key(value):
+        if key(value(tree)) > key(val):
             # go to left
-            return contains(left(tree), value)
+            return contains(left(tree), val)
         else:
             # go to right
-            return contains(left(tree), value)
+            return contains(right(tree), val)
+
+
+def pop_max(tree):
+    """
+    Returns maximum element from the tree
+    """
+    if tree is None:
+        return tree, None
+    elif right(tree) is None:
+        return left(tree), value(tree)
+    else:
+        # there is right side of current tree goto right side
+        right_node, val = pop_max(right(tree))
+        return set_right(tree, right_node), val
+
+
+def pop_min(tree):
+    """
+    Returns minimum element from the tree
+    """
+    if tree is None:
+        return tree, None
+    elif left(tree) is None:
+        return right(tree), value(tree)
+    else:
+        # there is right side of current tree goto right side
+        left_node, val = pop_min(left(tree))
+        return set_left(tree, left_node), val
+
+
+def pop(tree, val, key=_key_func):
+    # TODO
+    pass
