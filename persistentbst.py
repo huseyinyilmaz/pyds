@@ -1,10 +1,5 @@
 """
 Binary search tree implementation.
-
-In a consistent tree:
-    compare(parent, right(parent)) is True
-    compare(parent, left(parent)) is True
-
 """
 from node import (left, set_left,
                   right, set_right,
